@@ -3,33 +3,55 @@ package com.uniovi.sdi.sdi2526902spring.controllers;
 import com.uniovi.sdi.sdi2526902spring.services.MarksService;
 import com.uniovi.sdi.sdi2526902spring.entities.Mark;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class MarksController {
 
     @Autowired //Inyectar el servicio
     private MarksService marksService;
 
-    @RequestMapping("/mark/list")
-    public String getList() {
-        return marksService.getMarks().toString();
+    @RequestMapping(value = "/mark/list", method = RequestMethod.GET)
+    public String getList(Model model) {
+        model.addAttribute("markList", marksService.getMarks());
+        return "mark/list";
     }
 
     @PostMapping("/mark/add")
     public String setMark(@ModelAttribute Mark mark) {
         marksService.addMark(mark);
-        return "Mark Added";
+        return "redirect:/mark/list";
     }
 
-    @GetMapping(value="/mark/details/{id}")
-    public String getDetail(@PathVariable Long id) {
-        return marksService.getMark(id).toString();
+    @GetMapping("/mark/details/{id}")
+    public String getDetail(Model model, @PathVariable Long id) {
+        model.addAttribute("mark", marksService.getMark(id));
+        return "mark/details";
     }
 
     @RequestMapping("/mark/delete/{id}")
     public String deleteMark(@PathVariable Long id) {
         marksService.deleteMark(id);
-        return "Mark Deleted";
+        return "redirect:/mark/list";
+    }
+
+    @GetMapping(value = "/mark/add")
+    public String getMark() {
+        return "mark/add";
+    }
+
+    @GetMapping(value = "/mark/edit/{id}")
+    public String getEdit(Model model, @PathVariable Long id) {
+        model.addAttribute("mark", marksService.getMark(id));
+        return "mark/edit";
+    }
+
+    @PostMapping(value="/mark/edit/{id}")
+    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id) {
+        mark.setId(id);
+        marksService.addMark(mark);
+        return "redirect:/mark/details/" + id;
     }
 }
