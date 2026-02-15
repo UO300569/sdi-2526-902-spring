@@ -1,6 +1,12 @@
 package com.uniovi.sdi.sdi2526902spring.entities;
 
+import jakarta.persistence.*;
+import jakarta.persistence.GenerationType;
+
+@Entity
 public class Mark {
+    @Id
+    @GeneratedValue
     private Long id;
     private String description;
     private double score;
@@ -9,6 +15,10 @@ public class Mark {
         this.id = id;
         this.description = description;
         this.score = score;
+    }
+
+    public Mark() {
+
     }
 
     @Override
