@@ -6,7 +6,8 @@
 
 <div class="container" id="main-container">
     <h2>Editar departamento</h2>
-    <form class="form-horizontal" method="post" th:action="${'/department/edit/'+ department.id}">
+    <form class="form-horizontal" method="post" th:action="@{/department/edit}">
+        <input type="hidden" th:value="${department.id}" name="id" />
         <div class="form-group">
             <label class="control-label col-sm-2" for="code">Código:</label>
             <div class="col-sm-10">

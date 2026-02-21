@@ -41,16 +41,16 @@ public class DepartmentController {
         return "/department/add";
     }
 
-    @PutMapping("/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String getEdit(Model model, @PathVariable Long id) {
-        // ...
-        return null;
+        model.addAttribute("department", departmentService.getDepartment(id));
+        return "department/edit";
     }
 
-    @PostMapping("/edit/{id}") //
-    public String setEdit(@ModelAttribute Department dept, @PathVariable Long id) {
-        // ...
-        return null;
+    @PostMapping("/edit")
+    public String setEdit(@ModelAttribute Department dept) {
+        departmentService.addDepartment(dept);
+        return "redirect:/department/details/" + dept.getId();
     }
 
     @GetMapping("/remove/{id}")
