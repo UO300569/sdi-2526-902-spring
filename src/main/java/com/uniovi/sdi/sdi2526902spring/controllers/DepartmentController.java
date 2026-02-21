@@ -41,13 +41,15 @@ public class DepartmentController {
         return "/department/add";
     }
 
-    @GetMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public String getEdit(Model model, @PathVariable Long id) {
+        // ...
         return null;
     }
 
     @PostMapping("/edit/{id}") //
     public String setEdit(@ModelAttribute Department dept, @PathVariable Long id) {
+        // ...
         return null;
     }
 
