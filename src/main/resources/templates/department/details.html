@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/department/fragments/departmentHead"><title>Gestionar departamentos</title></head>
+<body>
+<nav th:replace="/department/fragments/departmentNav"></nav>
+
+<div class="container" id="main-container">
+    <h2>Detalles del departamento</h2>
+    <div class="card">
+        <div class="card-header">Código</div>
+        <div class="card-body">
+            <p class="card-text" th:text="${department.code}">Código</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">Nombre</div>
+        <div class="card-body">
+            <p class="card-text" th:text="${department.name}">Nombre</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">Facultad</div>
+        <div class="card-body">
+            <p class="card-text" th:text="${department.faculty}">Facultad</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">Teléfono</div>
+        <div class="card-body">
+            <p class="card-text" th:text="${department.telephone}">Teléfono</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">Número de profesores</div>
+        <div class="card-body">
+            <p class="card-text" th:text="${department.professors}">Profesores</p>
+        </div>
+    </div>
+</div>
+<footer th:replace="department/fragments/departmentFooter"></footer>
+</body>
+</html>

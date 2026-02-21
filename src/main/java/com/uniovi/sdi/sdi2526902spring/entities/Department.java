@@ -1,16 +1,22 @@
 package com.uniovi.sdi.sdi2526902spring.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+@Entity
 public class Department {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String code;
     private String name;
     private String faculty;
     private String telephone;
     private int professors;
 
-    public Department(String code, String name, String faculty, String telephone, int professors) {
+    public Department(Long id, String code, String name, String faculty, String telephone, int professors) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.faculty = faculty;
@@ -25,12 +31,21 @@ public class Department {
     @Override
     public String toString() {
         return "Department{" +
-                "code='" + code + '\'' +
+                "id=" + id +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", faculty='" + faculty + '\'' +
-                ", telephone=" + telephone +
+                ", telephone='" + telephone + '\'' +
                 ", professors=" + professors +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {

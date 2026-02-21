@@ -11,39 +11,50 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RestController
+@Controller
 @RequestMapping("/department")
 public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping
-    public List<Department> getList() {
-        return departmentService.getDepartments();
+    @GetMapping(value = "/list")
+    public String getList(Model model) {
+        model.addAttribute("departmentList", departmentService.getDepartments());
+        return "department/list";
     }
 
-    @GetMapping("/details")
-    public Department getDetails(@RequestParam String code) {
-        return departmentService.getDepartment(code);
+    @GetMapping("/details/{id}")
+    public String getDetails(@PathVariable Long id, Model model) {
+        model.addAttribute("department", departmentService.getDepartment(id));
+        return "department/details";
     }
 
-    @PostMapping
-    public String addDepartment(@RequestBody Department department) {
+    @PostMapping("/add")
+    public String addDepartment(@ModelAttribute Department department) {
         departmentService.addDepartment(department);
-        return "Departamento Añadido";
+        return "redirect:/department/list";
     }
 
-    @PutMapping("/edit")
-    public String editDepartment(@RequestBody Department department) {
-        departmentService.editDepartment(department);
-        return "Departamento actualizado";
+    @GetMapping(value = "/add")
+    public String getDepartment() {
+        return "/department/add";
     }
 
-    @DeleteMapping("/remove")
-    public String removeDepartment(@RequestParam String code) {
-        departmentService.deleteDepartment(code);
-        return "Departamento eliminado";
+    @GetMapping("/edit/{id}")
+    public String getEdit(Model model, @PathVariable Long id) {
+        return null;
+    }
+
+    @PostMapping("/edit/{id}") //
+    public String setEdit(@ModelAttribute Department dept, @PathVariable Long id) {
+        return null;
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeDepartment(@PathVariable Long id) {
+        departmentService.deleteDepartment(id);
+        return "redirect:/department/list";
     }
 
 

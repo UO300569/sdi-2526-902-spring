@@ -16,12 +16,14 @@ public class DepartmentService {
     @PostConstruct
     public void init() {
         departments.add(new Department(
+                1L,
                 "INF-01",
                 "Departamento de Informática",
                 "EII",
                 "985102796",
                 120));
         departments.add(new Department(
+                2L,
                 "MAT-01",
                 "Departamento de Matemáticas",
                 "EII",
@@ -34,9 +36,9 @@ public class DepartmentService {
         return departments;
     }
 
-    public Department getDepartment(String code) {
+    public Department getDepartment(Long id) {
         for (Department dept : departments) {
-            if (dept.getCode().equals(code)) {
+            if (dept.getId().equals(id)) {
                 return dept;
             }
         }
@@ -57,8 +59,8 @@ public class DepartmentService {
         }
     }
 
-    public void  deleteDepartment(String code) {
-        departments.removeIf(dept -> dept.getCode().equals(code));
+    public void  deleteDepartment(Long id) {
+        departments.removeIf(dept -> dept.getId().equals(id));
     }
 
 }
