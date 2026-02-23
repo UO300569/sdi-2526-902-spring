@@ -1,5 +1,6 @@
 package com.uniovi.sdi.sdi2526902spring.controllers;
 
+import com.uniovi.sdi.sdi2526902spring.entities.Mark;
 import com.uniovi.sdi.sdi2526902spring.entities.User;
 import com.uniovi.sdi.sdi2526902spring.services.SecurityService;
 import com.uniovi.sdi.sdi2526902spring.services.UsersService;
@@ -55,18 +56,6 @@ public class UsersController {
         return "redirect:/user/list";
     }
 
-    @GetMapping(value = "/user/edit/{id}")
-    public String getEdit(Model model, @PathVariable Long id) {
-        User user = usersService.getUser(id);
-        model.addAttribute("user", user);
-        return "user/edit";
-    }
-
-    @PostMapping(value = "/user/edit/{id}")
-    public String setEdit(@PathVariable Long id, @ModelAttribute User user) {
-        usersService.addUser(user);
-        return "redirect:/user/details/" + id;
-    }
 
     @PostMapping("/signup")
     public String signup(@Validated User user, BindingResult result) {
@@ -98,5 +87,30 @@ public class UsersController {
         model.addAttribute("user", new User());
         return "signup";
     }
+
+    @GetMapping(value = "/user/edit/{id}")
+    public String getEdit(Model model, @PathVariable Long id) {
+        User user = usersService.getUser(id);
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
+    @PostMapping(value = "/user/edit/{id}")
+    public String setEdit(@ModelAttribute User user, @PathVariable Long id) {
+        User originalUser = usersService.getUser(id);
+        originalUser.setName(user.getName());
+        originalUser.setLastName(user.getLastName());
+        originalUser.setDni(user.getDni());
+        usersService.updateOriginalUser(originalUser);
+        return "redirect:/user/details/" + id;
+    }
+
+    @GetMapping("/user/list/update")
+    public String updateList(Model model) {
+        model.addAttribute("usersList", usersService.getUsers());
+        return "user/list :: usersTable";
+    }
+
+
 }
 
