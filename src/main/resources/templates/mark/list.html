@@ -1,20 +1,46 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/head"><title>Notas</title></head>
-
 <body>
 <nav th:replace="fragments/nav"></nav>
 
-
 <div class="container" id="main-container">
     <h2>Notas</h2>
+
+    <p>Notas consultadas recientemente por el usuario:</p>
+    <div class="table-responsive">
+        <table class="table table-hover" id="consultedTableMarks">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Puntuación</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mark : ${consultedList}">
+                <td th:text="${mark.id}"> 1</td>
+                <td th:text="${mark.description}"> Ejercicio 1</td>
+                <td th:text="${mark.score}">10</td>
+                <td><a th:href="${'/mark/details/' + mark.id}">detalles</a></td>
+                <td><a th:href="${'/mark/edit/' + mark.id}">modificar</a></td>
+                <td><a th:href="${'/mark/delete/' + mark.id}">eliminar</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <p>Las notas que actualmente figuran en el sistema son las siguientes:</p>
     <button type="button" id="updateButton" class="btn btn-primary">Actualizar</button>
-    <script>
-        $("#updateButton").click(function () {
-            $("#marksTable").load('/mark/list/update');
-        });
-    </script>
+    <script> $("#updateButton").click(function () {
+        $("#marks").load('/mark/list/update');
+    }); </script>
+
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="marksTable" id="marksTable">
             <thead>
@@ -33,8 +59,36 @@
                 <td th:text="${mark.description}"> Ejercicio 1</td>
                 <td th:text="${mark.score}">10</td>
                 <td><a th:href="${'/mark/details/' + mark.id}">detalles</a></td>
-                <td><a th:href="${'/mark/edit/' + mark.id}">modificar</a></td>
-                <td><a th:href="${'/mark/delete/' + mark.id}">eliminar</a></td>
+                <td>
+                    <a sec:authorize="hasRole('PROFESSOR')" th:href="${'/mark/edit/' + mark.id}">modificar</a>
+                </td>
+                <td>
+                    <a sec:authorize="hasRole('PROFESSOR')" th:href="${'/mark/delete/' + mark.id}">eliminar</a>
+                    <div sec:authorize="hasRole('STUDENT')">
+                        <div th:if="${mark.resend}">
+                            <button type="button" th:id="${'resendButton' + mark.id}" class="btn btn-success">Reenviar
+                            </button>
+                            <script th:inline="javascript"> /*<![CDATA[*/
+                            $("#resendButton" + "[[${mark.id}]]").click(function () {
+                                $.get("/mark/[[${mark.id}]]/noresend", function (data) {
+                                    $("#marksTable").load('/mark/list/update');
+                                });
+                            }); /*]]>*/
+                            </script>
+                        </div>
+                        <div th:unless="${mark.resend}">
+                            <button type="button" th:id="${'noresendButton' + mark.id}" class="btn btn-info">No
+                                reenviar
+                            </button>
+                            <script th:inline="javascript"> /*<![CDATA[*/
+                            $("#noresendButton" + "[[${mark.id}]]").click(function () {
+                                $.get("/mark/[[${mark.id}]]/resend", function (data) {
+                                    $("#marksTable").load('/mark/list/update');
+                                });
+                            }); /*]]>*/ </script>
+                        </div>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
