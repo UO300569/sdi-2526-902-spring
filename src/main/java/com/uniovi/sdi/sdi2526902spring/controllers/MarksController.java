@@ -1,11 +1,15 @@
 package com.uniovi.sdi.sdi2526902spring.controllers;
 
+import com.uniovi.sdi.sdi2526902spring.entities.User;
 import com.uniovi.sdi.sdi2526902spring.services.MarksService;
 import com.uniovi.sdi.sdi2526902spring.entities.Mark;
+import com.uniovi.sdi.sdi2526902spring.services.SecurityService;
 import com.uniovi.sdi.sdi2526902spring.services.UsersService;
+import com.uniovi.sdi.sdi2526902spring.validators.MarkValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -13,10 +17,12 @@ public class MarksController {
 
     private final MarksService marksService;
     private final UsersService usersService;
+    private final MarkValidator markValidator;
 
-    public MarksController(MarksService marksService, UsersService usersService) {
+    public MarksController(MarksService marksService, UsersService usersService, MarkValidator markValidator) {
         this.marksService = marksService;
         this.usersService = usersService;
+        this.markValidator = markValidator;
     }
 
     @GetMapping("/mark/list")
@@ -26,8 +32,22 @@ public class MarksController {
     }
 
     @PostMapping("/mark/add")
-    public String setMark(@ModelAttribute Mark mark) {
+    public String setMark(@ModelAttribute Mark mark, BindingResult result, Model model) {
+
+        markValidator.validate(mark, result);
+
+        if (result.hasErrors()) {
+            model.addAttribute("usersList", usersService.getUsers());
+            return "mark/add";
+        }
+
+        if (mark.getUser() != null && mark.getUser().getId() != null) {
+            User realUser = usersService.getUser(mark.getUser().getId());
+            mark.setUser(realUser);
+        }
+
         marksService.addMark(mark);
+
         return "redirect:/mark/list";
     }
 
@@ -45,6 +65,9 @@ public class MarksController {
 
     @GetMapping(value = "/mark/add")
     public String getMark(Model model) {
+        Mark mark = new Mark();
+        mark.setUser(new User());
+        model.addAttribute("mark", mark);
         model.addAttribute("usersList", usersService.getUsers());
         return "mark/add";
     }

@@ -5,44 +5,53 @@
 <nav th:replace="/department/fragments/departmentNav"></nav>
 
 <div class="container" id="main-container">
-    <h2>Agregar nota</h2>
-    <form class="form-horizontal" method="post" action="/department/add">
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="code">Código:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="code" name="code" placeholder="INF-01" required="true" />
-            </div>
+    <h2>Agregar Departamento</h2> <form class="form-horizontal" th:action="@{/department/add}" method="post" th:object="${department}">
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Código:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" th:field="*{code}" placeholder="INFO-120A" />
+            <span class="text-danger" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="name">Nombre:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Departamento de Informática" required="true" />
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Nombre:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" th:field="*{name}" placeholder="Departamento de Informática"/>
+            <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="faculty">Facultad:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="faculty" name="faculty" placeholder="EII" required="true" />
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Facultad:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" th:field="*{faculty}" placeholder="EII" />
+            <span class="text-danger" th:if="${#fields.hasErrors('faculty')}" th:errors="*{faculty}"></span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="telephone">Teléfono:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="telephone" name="telephone" placeholder="xxxxxxxxx" required="true" />
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="professors">Número de profesores:</label>
-                <div class="col-sm-10">
-                    <input type="number" class="form-control" id="professors" name="professors" placeholder="120" required="true" />
-                </div>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Teléfono:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" th:field="*{telephone}" placeholder="985123456" />
+            <span class="text-danger" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></span>
         </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Número de profesores:</label>
+        <div class="col-sm-10">
+            <input type="number" class="form-control" th:field="*{professors}" placeholder="120" />
         </div>
-    </form>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+    </div>
+</form>
 </div>
 
 <footer th:replace="department/fragments/departmentFooter"></footer>

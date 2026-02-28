@@ -9,13 +9,13 @@ public class Mark {
     @GeneratedValue
     private Long id;
     private String description;
-    private double score;
+    private Double score;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Mark(Long id, String description, double score) {
+    public Mark(Long id, String description, Double score) {
         this.id = id;
         this.description = description;
         this.score = score;
@@ -57,11 +57,11 @@ public class Mark {
         this.description = description;
     }
 
-    public double getScore() {
+    public Double getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(Double score) {
         this.score = score;
     }
 
