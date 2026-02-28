@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,8 +31,10 @@ public class MarksController {
     }
 
     @GetMapping("/mark/list")
-    public String getList(Model model) {
-        model.addAttribute("marksList", marksService.getMarks());
+    public String getList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("marksList", marksService.getMarksForUser(user));
         return "mark/list";
     }
 
@@ -93,8 +96,10 @@ public class MarksController {
     }
 
     @GetMapping("/mark/list/update")
-    public String updateList(Model model) {
-        model.addAttribute("marksList", marksService.getMarks());
+    public String updateList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("marksList", marksService.getMarksForUser(user));
         return "mark/list :: marksTable";
     }
 
