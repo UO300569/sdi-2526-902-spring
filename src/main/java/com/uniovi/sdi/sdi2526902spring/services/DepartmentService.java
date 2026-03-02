@@ -4,6 +4,8 @@ import com.uniovi.sdi.sdi2526902spring.entities.Department;
 import com.uniovi.sdi.sdi2526902spring.repositories.DepartmentRepository;
 import com.uniovi.sdi.sdi2526902spring.repositories.MarksRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,6 +25,10 @@ public class DepartmentService {
         List<Department> departments = new ArrayList<>();
         departmentRepository.findAll().forEach(departments::add);
         return departments;
+    }
+
+    public Page<Department> getDepartments(Pageable pageable) {
+        return departmentRepository.findAll(pageable);
     }
 
     public Department getDepartment(Long id) {

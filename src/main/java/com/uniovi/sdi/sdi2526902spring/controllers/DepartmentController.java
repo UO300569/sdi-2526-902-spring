@@ -8,6 +8,8 @@ import com.uniovi.sdi.sdi2526902spring.services.UsersService;
 import com.uniovi.sdi.sdi2526902spring.validators.DepartmentValidator;
 import com.uniovi.sdi.sdi2526902spring.validators.MarkValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,8 +32,11 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "/list")
-    public String getList(Model model) {
-        model.addAttribute("departmentList", departmentService.getDepartments());
+    public String getList(Model model, Pageable pageable) {
+        Page<Department> departments = departmentService.getDepartments(pageable);
+        model.addAttribute("departmentList", departments.getContent());
+        model.addAttribute("page", departments);
+
         return "department/list";
     }
 

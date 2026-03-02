@@ -12,9 +12,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
-    
+
     <p>Los usuarios que actualmente figuran en el sistema son los siguientes:</p>
     <div th:replace="user/fragments/usersTable"/>
+    <footer th:replace="fragments/pagination"></footer>
 </div>
 <footer th:replace="fragments/footer"/>
 </body>
