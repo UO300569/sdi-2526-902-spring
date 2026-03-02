@@ -6,6 +6,8 @@ import com.uniovi.sdi.sdi2526902spring.services.RolesService;
 import com.uniovi.sdi.sdi2526902spring.services.SecurityService;
 import com.uniovi.sdi.sdi2526902spring.services.UsersService;
 import com.uniovi.sdi.sdi2526902spring.validators.SignUpFormValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -30,15 +32,20 @@ public class UsersController {
     }
 
     @GetMapping("/user/list")
-    public String getListado(Model model) {
-        model.addAttribute("usersList", usersService.getUsers());
+    public String getListado(Model model, Pageable pageable, @RequestParam(value = "searchText", required = false) String searchText) {
+        Page<User> users = usersService.searchUsersByNameAndLastName(pageable, searchText);
+
+        model.addAttribute("usersList", users.getContent());
+        model.addAttribute("page", users);
+
         return "user/list";
     }
 
     @GetMapping(value = "/user/add")
-    public String getUser(Model model) {
+    public String getUser(Model model, Pageable pageable) {
         model.addAttribute("rolesList", rolesService.getRoles());
-        model.addAttribute("usersList", usersService.getUsers());
+        Page<User> users = usersService.getUsers(pageable);
+        model.addAttribute("usersList", users.getContent());
         return "user/add";
     }
 
@@ -111,8 +118,13 @@ public class UsersController {
     }
 
     @GetMapping("/user/list/update")
-    public String updateList(Model model) {
-        model.addAttribute("usersList", usersService.getUsers());
+    public String updateList(Model model, Pageable pageable,
+                             @RequestParam(value = "searchText", required = false) String searchText) {
+
+        Page<User> users = usersService.searchUsersByNameAndLastName(pageable, searchText);
+
+        model.addAttribute("usersList", users.getContent());
+
         return "user/list :: usersTable";
     }
 

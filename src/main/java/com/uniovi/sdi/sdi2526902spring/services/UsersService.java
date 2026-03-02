@@ -5,6 +5,8 @@ import java.util.*;
 import com.uniovi.sdi.sdi2526902spring.entities.User;
 import com.uniovi.sdi.sdi2526902spring.repositories.UsersRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,8 @@ public class UsersService {
     public void init() {
     }
 
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        usersRepository.findAll().forEach(users::add);
-        return users;
+    public Page<User> getUsers(Pageable pageable) {
+        return usersRepository.findAll(pageable);
     }
 
     public User getUser(Long id) {
@@ -48,4 +48,15 @@ public class UsersService {
     public void updateOriginalUser(User user) {
         usersRepository.save(user);
     }
+
+    public Page<User> searchUsersByNameAndLastName(Pageable pageable, String searchText) {
+        Page<User> users;
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            users = usersRepository.searchByNameAndLastName(pageable, searchText);
+        } else {
+            users = usersRepository.findAll(pageable);
+        }
+        return users;
+    }
+
 }
