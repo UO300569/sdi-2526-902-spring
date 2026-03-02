@@ -35,8 +35,9 @@
                 <th scope="col">Descripción</th>
                 <th scope="col">Puntuación</th>
                 <th scope="col"></th>
+                <th scope="col" sec:authorize="hasRole('ROLE_PROFESSOR')"></th>
                 <th scope="col"></th>
-                <th scope="col"></th>
+
             </tr>
             </thead>
             <tbody>
@@ -45,9 +46,7 @@
                 <td th:text="${mark.description}"> Ejercicio 1</td>
                 <td th:text="${mark.score}">10</td>
                 <td><a th:href="${'/mark/details/' + mark.id}">detalles</a></td>
-                <td>
-                    <a sec:authorize="hasRole('PROFESSOR')" th:href="${'/mark/edit/' + mark.id}">modificar</a>
-                </td>
+                <td><a sec:authorize="hasRole('PROFESSOR')" th:href="${'/mark/edit/' + mark.id}">modificar</a></td>
                 <td>
                     <a sec:authorize="hasRole('PROFESSOR')" th:href="${'/mark/delete/' + mark.id}">eliminar</a>
                     <div sec:authorize="hasRole('STUDENT')">
@@ -64,7 +63,7 @@
                                     }
                                     $("#marksTable").load(urlUpdate);
                                 });
-                            }); /*]]>*/ </script>
+                            }); /*]]>*/
                             </script>
                         </div>
                         <div th:unless="${mark.resend}">
