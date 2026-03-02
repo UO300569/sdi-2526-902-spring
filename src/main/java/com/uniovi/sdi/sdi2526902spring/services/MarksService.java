@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -45,6 +46,7 @@ public class MarksService {
         marksRepository.deleteById(id);
     }
 
+    @Transactional
     public void setMarkResend(boolean revised, Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String dni = auth.getName();
@@ -58,7 +60,7 @@ public class MarksService {
     public Page<Mark> getMarksForUser(Pageable pageable, User user) {
         Page<Mark> marks = new PageImpl<>(new LinkedList<>());
         if (user.getRole().equals("ROLE_STUDENT")) {
-            marks = marksRepository.findAllByUser(pageable, user);
+            marks = marksRepository.findAllByUserOrderByIdAsc(pageable, user);
         }
         if (user.getRole().equals("ROLE_PROFESSOR")) {
             marks = getMarks(pageable);
@@ -68,7 +70,7 @@ public class MarksService {
 
     public Page<Mark> searchMarksByDescriptionAndNameForUser(Pageable pageable, String searchText, User user) {
         Page<Mark> marks = new PageImpl<>(new LinkedList<>());
-        searchText="%"+searchText+"%";
+
         if (user.getRole().equals("ROLE_STUDENT")) {
             marks = marksRepository.searchByDescriptionNameAndUser(pageable, searchText, user);
         }
