@@ -1,4 +1,4 @@
-package com.uniovi.sdi.sdi2526902spring;
+package com.uniovi.sdi.sdi2526902spring.util;
 
 
 import java.time.Duration;
