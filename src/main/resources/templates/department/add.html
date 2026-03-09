@@ -2,7 +2,7 @@
 <html lang="en">
 <head th:replace="/department/fragments/departmentHead"><title>Gestionar departamentos</title></head>
 <body>
-<nav th:replace="/department/fragments/departmentNav"></nav>
+<nav th:replace="/fragments/nav"></nav>
 
 <div class="container" id="main-container">
     <h2>Agregar Departamento</h2> <form class="form-horizontal" th:action="@{/department/add}" method="post" th:object="${department}">

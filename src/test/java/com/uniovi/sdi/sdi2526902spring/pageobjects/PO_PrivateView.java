@@ -27,9 +27,53 @@ public class PO_PrivateView extends PO_NavView {
         driver.findElement(boton).click();
     }
 
+    static public void fillFormAddDepartment(WebDriver driver, String code, String name, String faculty,
+                                             String telephone, int numberProfessors)
+    {
+        //Esperamos 5 segundo a que carge el DOM porque en algunos equipos falla
+        SeleniumUtils.waitSeconds(driver, 5);
+
+        // Código
+        WebElement codeW = driver.findElement(By.name("code"));
+        codeW.clear();
+        codeW.sendKeys(code);
+
+        // Nombre
+        WebElement nameW = driver.findElement(By.name("name"));
+        nameW.clear();
+        nameW.sendKeys(name);
+
+        // Facultad
+        WebElement facultyW = driver.findElement(By.name("faculty"));
+        facultyW.clear();
+        facultyW.sendKeys(faculty);
+
+        // Teléfono
+        WebElement telephoneW = driver.findElement(By.name("telephone"));
+        telephoneW.clear();
+        telephoneW.sendKeys(telephone);
+
+        // Nombre
+        WebElement professorsW = driver.findElement(By.name("professors"));
+        professorsW.clear();
+        professorsW.sendKeys(String.valueOf(numberProfessors));
+
+        By boton = By.className("btn");
+        driver.findElement(boton).click();
+    }
+
     static public void clickMarksMenu(WebDriver driver) {
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//*[@id='myNavbar']/ul[1]/li[2]");
         elements.get(0).click();
+    }
+
+    static public void clickDepartmentsMenu(WebDriver driver) {
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[@id='navbarDropdown2']");
+        if (!elements.isEmpty()) {
+            elements.get(0).click();
+        } else {
+            throw new RuntimeException("No se encontró el menú de departamentos");
+        }
     }
 
     static public void goToLastPage(WebDriver driver) {
@@ -41,5 +85,16 @@ public class PO_PrivateView extends PO_NavView {
         String xpath = "//td[contains(text(), '" + text + "')]/following-sibling::*/a[contains(@href, 'mark/delete')]";
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", xpath);
         elements.get(0).click();
+    }
+
+    static public void deleteDepartmentByCode(WebDriver driver, String code) {
+        String xpath = "//tr[contains(., '" + code + "')]//a[contains(@href, 'department/remove')]";
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", xpath);
+
+        if (!elements.isEmpty()) {
+            elements.get(0).click();
+        } else {
+            System.out.println("No se encontró el botón de eliminar para el código: " + code);
+        }
     }
 }
