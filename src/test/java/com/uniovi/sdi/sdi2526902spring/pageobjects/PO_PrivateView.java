@@ -5,6 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
+
 public class PO_PrivateView extends PO_NavView {
     static public void fillFormAddMark(WebDriver driver, int userOrder, String descriptionp, String scorep)
     {
@@ -22,5 +25,21 @@ public class PO_PrivateView extends PO_NavView {
         score.sendKeys(scorep);
         By boton = By.className("btn");
         driver.findElement(boton).click();
+    }
+
+    static public void clickMarksMenu(WebDriver driver) {
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//*[@id='myNavbar']/ul[1]/li[2]");
+        elements.get(0).click();
+    }
+
+    static public void goToLastPage(WebDriver driver) {
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        elements.get(elements.size() - 1).click();
+    }
+
+    static public void clickDeleteMarkByText(WebDriver driver, String text) {
+        String xpath = "//td[contains(text(), '" + text + "')]/following-sibling::*/a[contains(@href, 'mark/delete')]";
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", xpath);
+        elements.get(0).click();
     }
 }
