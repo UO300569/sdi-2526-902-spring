@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -236,14 +237,12 @@ class GradeManagerApplicationTests {
         PO_LoginView.fillLoginForm(driver, "99999993D", "123456");
 
         PO_PrivateView.clickMarksMenu(driver);
-        PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'mark/add')]").get(0).click();
+        List<WebElement> links = driver.findElements(By.xpath("//a[contains(@href, 'department/add')]"));
 
-        String checkText = "Nota sistemas distribuidos";
-        PO_PrivateView.fillFormAddMark(driver, 3, checkText, "8");
+        Assertions.assertEquals(0, links.size());
 
-        PO_PrivateView.goToLastPage(driver);
-        List<WebElement> elements = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, elements.getFirst().getText());
+        driver.navigate().to(URL + "/department/add");
+        Assertions.assertFalse(Objects.requireNonNull(driver.getCurrentUrl()).contains("department/add"));
 
         PO_LoginView.logOut(driver);
     }

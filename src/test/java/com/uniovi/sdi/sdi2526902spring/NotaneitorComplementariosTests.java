@@ -76,19 +76,13 @@ class NotaneitorComplementariosTests {
     @Test
     @Order(3)
     public void PR03() {
-        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_HomeView.clickOption(driver, "identificarse", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "99999990A", "123456");
 
         PO_PrivateView.clickDepartmentsMenu(driver);
 
-        List<WebElement> addLinks = PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'department/add')]");
+        List<WebElement> addLinks = driver.findElements(By.xpath("//a[contains(@href, 'department/add')]"));
         Assertions.assertEquals(0, addLinks.size());
-
-        driver.navigate().to(URL + "/department/add");
-
-
-        String currentUrl = driver.getCurrentUrl();
-        Assertions.assertFalse(currentUrl.contains("department/add"));
 
         PO_LoginView.logOut(driver);
     }
